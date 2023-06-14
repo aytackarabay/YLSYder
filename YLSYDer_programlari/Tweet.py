@@ -5,7 +5,6 @@ import utils
 
 def Tweet_Poster(Program_control_path, Tweets_tags_path, list_of_media):
     utils.terminate_if_missing_file(Program_control_path)
-    utils.terminate_if_missing_file(Tweets_tags_path)
             
     program_control = pd.read_excel(Program_control_path)
     tweets_tags = pd.read_excel(Tweets_tags_path)

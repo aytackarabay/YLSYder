@@ -95,7 +95,6 @@ def Emailer_manager(program_control, letter, alici_list, hitap):
         time.sleep(3600*10)
 
 
-def Letter_preprocessor(Mail_icerigi_path, hitap):
-    with open(Mail_icerigi_path, "r") as letter_file:
-        letter = letter_file.read()
+def Letter_preprocessor(Mail_icerigi, hitap):
+    letter = Mail_icerigi
     return letter.replace("[Vekilim]", hitap)
