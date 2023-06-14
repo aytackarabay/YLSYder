@@ -64,13 +64,12 @@ def Tweet_Manager(api, list_of_media, Tweets, Tags, Frequencies):
         time.sleep(np.random.randint(750, 900))
 
 
-def Emailer_manager(program_control, letter, alici_list, hitap):
+def Emailer_manager(program_control, letter, alici_list, email_basliklari, hitap):
     my_email = program_control.email[0]
     my_password = program_control.password[0]
 
-    subject = f"1416 YLSY Bursiyerleri için Sabit Kur Talep Ediyoruz!"
-
     while True:
+        subject = np.random.choice(list(email_basliklari.Konu))
         counter = 0
         for index, row in alici_list.iterrows():
             counter += 1
