@@ -92,7 +92,7 @@ def Emailer_manager(program_control, letter, alici_list, hitap):
             print(f"Email was sent to {hitap} {person_name} - {recipient}")
             if counter % 50 == 0:
                 time.sleep(300)
-        time.sleep(3600*10)
+        time.sleep(3600*24)
 
 
 def Letter_preprocessor(Mail_icerigi, hitap):
