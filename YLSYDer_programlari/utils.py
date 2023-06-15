@@ -25,7 +25,7 @@ def check_if_file_exists(filename):
     return(os.path.exists(filename))
 
 
-def Post_Tweet(Tweets, Tags, tweet, media, api):
+def Post_Tweet(Tweets, program_control, Tags, tweet, media, api):
     if '\n' in Tweets[tweet]:
         updated_tweet = Tweets[tweet].replace("\n", " ")
     else:
@@ -36,9 +36,15 @@ def Post_Tweet(Tweets, Tags, tweet, media, api):
                 updated_tweet += ' ' + tag
         try:
             if media != None:
-                api.update_status(updated_tweet, media_ids=[media.media_id])
+                if program_control['v2'][0]:
+                    api.create_tweet(text = updated_tweet)
+                else:
+                    api.update_status(updated_tweet, media_ids=[media.media_id])
             else:
-                api.update_status(updated_tweet)
+                if program_control['v2'][0]:
+                    api.create_tweet(text = updated_tweet)
+                else:
+                    api.update_status(updated_tweet)
             print('\nSuccesfully tweeted:\n%s'%(updated_tweet))
         except tweepy.Forbidden as warning:
             print('\nTweet is not successful. Reason: ')
@@ -55,12 +61,12 @@ def Media_Uploader(list_of_media, api):
     return media, api
 
 
-def Tweet_Manager(api, list_of_media, Tweets, Tags, Frequencies):
+def Tweet_Manager(api, program_control, list_of_media, Tweets, Tags, Frequencies):
     media, api = Media_Uploader(list_of_media, api)
     tweet = np.random.choice(range(len(Tweets)))
     if tweet in Frequencies:
         np.random.shuffle(Tags)
-        Post_Tweet(Tweets, Tags, tweet, media, api)
+        Post_Tweet(Tweets, program_control, Tags, tweet, media, api)
         time.sleep(np.random.randint(750, 900))
 
 
