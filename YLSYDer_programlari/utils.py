@@ -67,7 +67,7 @@ def Tweet_Manager(api, program_control, list_of_media, Tweets, Tags, Frequencies
     if tweet in Frequencies:
         np.random.shuffle(Tags)
         Post_Tweet(Tweets, program_control, Tags, tweet, media, api)
-        time.sleep(np.random.randint(750, 900))
+        time.sleep(1801)
 
 
 def Emailer_manager(program_control, letter, alici_list, email_basliklari, hitap):
