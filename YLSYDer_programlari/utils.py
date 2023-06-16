@@ -77,26 +77,31 @@ def Emailer_manager(program_control, letter, alici_list, email_basliklari, hitap
     while True:
         subject = np.random.choice(list(email_basliklari.Konu))
         counter = 0
+        alici_list = alici_list.sample(frac=1).reset_index(drop=True)
         for index, row in alici_list.iterrows():
-            counter += 1
-            if str(row['Isim2']) == 'nan':
-                person_name = f"{row['Isim']} {row['Soyisim']}"
-            else:
-                person_name = f"{row['Isim']} {row['Isim2']} {row['Soyisim']}"
+            try:
+                counter += 1
+                if str(row['Isim2']) == 'nan':
+                    person_name = f"{row['Isim']} {row['Soyisim']}"
+                else:
+                    person_name = f"{row['Isim']} {row['Isim2']} {row['Soyisim']}"
 
-            new_letter = letter.replace("[NAME]", person_name)
-            mes = f"Subject:{subject}\n\n{new_letter}"
-            recipient = row['Eposta']
-            with smtplib.SMTP("smtp.gmail.com", port=587) as connection:  # Starting a connection
-                connection.starttls()  # This is to encrypt email
-                connection.login(user=my_email, password=my_password)
-                connection.sendmail(
-                    from_addr=my_email,
-                    to_addrs=recipient,
-                    msg=mes.encode('utf-8'))
-            print(f"Email was sent to {hitap} {person_name} - {recipient}")
-            if counter % 50 == 0:
-                time.sleep(300)
+                new_letter = letter.replace("[NAME]", person_name)
+                mes = f"Subject:{subject}\n\n{new_letter}"
+                recipient = row['Eposta']
+                with smtplib.SMTP("smtp.gmail.com", port=587) as connection:  # Starting a connection
+                    connection.starttls()  # This is to encrypt email
+                    connection.login(user=my_email, password=my_password)
+                    connection.sendmail(
+                        from_addr=my_email,
+                        to_addrs=recipient,
+                        msg=mes.encode('utf-8'))
+                print(f"Email was sent to {hitap} {person_name} - {recipient}.")
+                if counter % 50 == 0:
+                    time.sleep(300)
+            except:
+                print(f'Email could not be sent to {hitap} {person_name} - {recipient}.')
+                pass
         time.sleep(3600*24)
 
 
