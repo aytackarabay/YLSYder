@@ -3,7 +3,10 @@ import time
 import tweepy
 import numpy as np
 import smtplib
+import logging
+import sys
 
+logging.basicConfig(stream=sys.stdout, level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 def import_or_install(package):
     try:
@@ -45,10 +48,10 @@ def Post_Tweet(Tweets, program_control, Tags, tweet, media, api):
                     api.create_tweet(text = updated_tweet)
                 else:
                     api.update_status(updated_tweet)
-            print('\nSuccesfully tweeted:\n%s'%(updated_tweet))
+            logging.info(f'Succesfully tweeted: {updated_tweet}')
         except tweepy.Forbidden as warning:
-            print('\nTweet is not successful. Reason: ')
-            print(warning)
+            logging.info('Tweet is not successful. Reason: ')
+            logging.info(warning)
     else:
         pass
 
@@ -96,11 +99,11 @@ def Emailer_manager(program_control, letter, alici_list, email_basliklari, hitap
                         from_addr=my_email,
                         to_addrs=recipient,
                         msg=mes.encode('utf-8'))
-                print(f"Email was sent to {hitap} {person_name} - {recipient}.")
+                logging.info(f"Email was sent to {hitap} {person_name} - {recipient}.")
                 if counter % 50 == 0:
                     time.sleep(300)
             except:
-                print(f'Email could not be sent to {hitap} {person_name} - {recipient}.')
+                logging.info(f'Email could not be sent to {hitap} {person_name} - {recipient}.')
                 pass
         time.sleep(3600*24)
 
