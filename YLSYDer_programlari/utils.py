@@ -84,47 +84,47 @@ def Emailer_manager(program_control, letter, alici_list, email_basliklari, hitap
         counter = 0
         alici_list = alici_list.sample(frac=1).reset_index(drop=True)
         for index, row in alici_list.iterrows():
-            # try:
-            counter += 1
-            if str(row['Isim2']) == 'nan':
-                person_name = f"{row['Isim']} {row['Soyisim']}"
-            else:
-                person_name = f"{row['Isim']} {row['Isim2']} {row['Soyisim']}"
+            try:
+                counter += 1
+                if str(row['Isim2']) == 'nan':
+                    person_name = f"{row['Isim']} {row['Soyisim']}"
+                else:
+                    person_name = f"{row['Isim']} {row['Isim2']} {row['Soyisim']}"
 
-            new_letter = letter.replace("[NAME]", person_name)
-            # mes = f"Subject:{subject}\n\n{new_letter}".encode('utf-8')
-            recipient = row['Eposta']
+                new_letter = letter.replace("[NAME]", person_name)
+                # mes = f"Subject:{subject}\n\n{new_letter}".encode('utf-8')
+                recipient = row['Eposta']
 
-            msg = EmailMessage()
-            msg['From'] = my_email
-            msg['To'] = recipient
-            msg['Subject'] = subject
-            msg.set_content(new_letter)
+                msg = EmailMessage()
+                msg['From'] = my_email
+                msg['To'] = recipient
+                msg['Subject'] = subject
+                msg.set_content(new_letter)
 
-            with open(Kanunonerisi, 'rb') as content_file:
-                content = content_file.read()
-                msg.add_attachment(content, maintype='application/pdf', subtype='pdf', filename=Kanunonerisi)
+                with open(Kanunonerisi, 'rb') as content_file:
+                    content = content_file.read()
+                    msg.add_attachment(content, maintype='application/pdf', subtype='pdf', filename=Kanunonerisi)
 
-            with open(Rapor, 'rb') as content_file:
-                content = content_file.read()
-                msg.add_attachment(content, maintype='application/pdf', subtype='pdf', filename=Rapor)
+                with open(Rapor, 'rb') as content_file:
+                    content = content_file.read()
+                    msg.add_attachment(content, maintype='application/pdf', subtype='pdf', filename=Rapor)
 
-            mes_w_attachment = msg.as_string().encode('utf-8')
+                mes_w_attachment = msg.as_string().encode('utf-8')
 
 
-            with smtplib.SMTP("smtp.gmail.com", port=587) as connection:  # Starting a connection
-                connection.starttls()  # This is to encrypt email
-                connection.login(user=my_email, password=my_password)
-                connection.sendmail(
-                    from_addr=my_email,
-                    to_addrs=recipient,
-                    msg=mes_w_attachment)
-            logging.info(f"Email was sent to {hitap} {person_name} - {recipient}.")
-            if counter % 50 == 0:
-                time.sleep(300)
-            # except:
-            #     logging.info(f'Email could not be sent to {hitap} {person_name} - {recipient}.')
-            #     pass
+                with smtplib.SMTP("smtp.gmail.com", port=587) as connection:  # Starting a connection
+                    connection.starttls()  # This is to encrypt email
+                    connection.login(user=my_email, password=my_password)
+                    connection.sendmail(
+                        from_addr=my_email,
+                        to_addrs=recipient,
+                        msg=mes_w_attachment)
+                logging.info(f"Email was sent to {hitap} {person_name} - {recipient}.")
+                if counter % 50 == 0:
+                    time.sleep(300)
+            except:
+                logging.info(f'Email could not be sent to {hitap} {person_name} - {recipient}.')
+                pass
         time.sleep(3600*24)
 
 
