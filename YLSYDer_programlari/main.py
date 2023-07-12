@@ -22,6 +22,8 @@ Tweets_tags_path = Git_Repo_path + 'TweetlerveHesaplar.xlsx'
 MV_listesi_path = Git_Repo_path + 'MV_Listesi.xlsx'
 Bakan_listesi_path = Git_Repo_path + 'Bakan_Listesi.xlsx'
 Email_konulari_path = Git_Repo_path + 'Email_konulari.xlsx'
+Kanunonerisi = Git_Repo_path + 'YLSYDER_Kanun_Onerisi.pdf'
+Rapor = Git_Repo_path + 'YLSYDER_Rapor.pdf'
 Mail_icerigi = requests.get(Git_Repo_path + 'mail.txt').text
 list_of_media = ["sabitkurgrafigi.png", "TBB_image1.jpeg","TBB_image2.jpeg","TBB_image3.jpeg",
                 "TBB_image4.jpeg", "TBB_image5.jpeg"]
@@ -33,14 +35,16 @@ ray.init()
 @ray.remote
 def Bakan_Email():
     try:
-        Emailer(Program_control_path, Mail_icerigi, Bakan_listesi_path, Email_konulari_path, 'Bakanım')
+        Emailer(Program_control_path, Mail_icerigi, Bakan_listesi_path, Email_konulari_path, 
+        'Bakanım', Kanunonerisi, Rapor)
     except:
         logging.info('Something is wrong with Bakan Emailer. Consider rerunning')
 
 @ray.remote
 def Vekil_Email():
     try:
-        Emailer(Program_control_path, Mail_icerigi, MV_listesi_path, Email_konulari_path, 'Vekilim')
+        Emailer(Program_control_path, Mail_icerigi, MV_listesi_path, Email_konulari_path, 
+        'Vekilim', Kanunonerisi, Rapor)
     except:
         logging.info('Something is wrong with Vekil Emailer. Consider rerunning')
 

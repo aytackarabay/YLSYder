@@ -5,6 +5,8 @@ import numpy as np
 import smtplib
 import logging
 import sys
+from email.mime.text import MIMEText
+from email.message import EmailMessage
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
@@ -73,7 +75,7 @@ def Tweet_Manager(api, program_control, list_of_media, Tweets, Tags, Frequencies
         time.sleep(1801)
 
 
-def Emailer_manager(program_control, letter, alici_list, email_basliklari, hitap):
+def Emailer_manager(program_control, letter, alici_list, email_basliklari, hitap, Kanunonerisi, Rapor):
     my_email = program_control.email[0]
     my_password = program_control.password[0]
 
@@ -90,15 +92,33 @@ def Emailer_manager(program_control, letter, alici_list, email_basliklari, hitap
                     person_name = f"{row['Isim']} {row['Isim2']} {row['Soyisim']}"
 
                 new_letter = letter.replace("[NAME]", person_name)
-                mes = f"Subject:{subject}\n\n{new_letter}"
+                mes = f"Subject:{subject}\n\n{new_letter}".encode('utf-8')
                 recipient = row['Eposta']
+
+                msg = EmailMessage()
+                msg['From'] = my_email
+                msg['To'] = recipient
+                msg['Subject'] = subject
+                msg.set_content(new_letter)
+
+                with open(Kanunonerisi, 'rb') as content_file:
+                    content = content_file.read()
+                    msg.add_attachment(content, maintype='application/pdf', subtype='pdf', filename=Kanunonerisi)
+
+                with open(Rapor, 'rb') as content_file:
+                    content = content_file.read()
+                    msg.add_attachment(content, maintype='application/pdf', subtype='pdf', filename=Rapor)
+
+                mes_w_attachment = msg.as_string()
+
+
                 with smtplib.SMTP("smtp.gmail.com", port=587) as connection:  # Starting a connection
                     connection.starttls()  # This is to encrypt email
                     connection.login(user=my_email, password=my_password)
                     connection.sendmail(
                         from_addr=my_email,
                         to_addrs=recipient,
-                        msg=mes.encode('utf-8'))
+                        msg=mes_w_attachment)
                 logging.info(f"Email was sent to {hitap} {person_name} - {recipient}.")
                 if counter % 50 == 0:
                     time.sleep(300)
