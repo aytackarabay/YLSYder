@@ -12,18 +12,21 @@ from pathlib import Path
 import requests
 import logging
 import sys
+import urllib.request
 
 # How to get gmail app password:
 # https://myaccount.google.com/apppasswords
 
+Kanunonerisi = 'YLSYDER_Kanun_Onerisi.pdf'
+Rapor = 'YLSYDER_Rapor.pdf'
 Git_Repo_path = 'https://raw.githubusercontent.com/tcokyasar44/YLSY_files/master/'
 Program_control_path = 'ProgramControl.xlsx'
 Tweets_tags_path = Git_Repo_path + 'TweetlerveHesaplar.xlsx'
 MV_listesi_path = Git_Repo_path + 'MV_Listesi.xlsx'
 Bakan_listesi_path = Git_Repo_path + 'Bakan_Listesi.xlsx'
 Email_konulari_path = Git_Repo_path + 'Email_konulari.xlsx'
-Kanunonerisi = Git_Repo_path + 'YLSYDER_Kanun_Onerisi.pdf'
-Rapor = Git_Repo_path + 'YLSYDER_Rapor.pdf'
+urllib.request.urlretrieve(Git_Repo_path + Kanunonerisi, Kanunonerisi)
+urllib.request.urlretrieve(Git_Repo_path + Rapor, Rapor)
 Mail_icerigi = requests.get(Git_Repo_path + 'mail.txt').text
 list_of_media = ["sabitkurgrafigi.png", "TBB_image1.jpeg","TBB_image2.jpeg","TBB_image3.jpeg",
                 "TBB_image4.jpeg", "TBB_image5.jpeg"]
